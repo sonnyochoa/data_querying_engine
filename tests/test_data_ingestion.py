@@ -40,11 +40,11 @@ class TestDataIngestion:
     def test_missing_values(self, test_data_dir):
         missing_csv = test_data_dir / 'missing.csv'
         pd.DataFrame({'A': [1, None], 'B': [3, 4]}).to_csv(missing_csv, index=False)
-        with pytest.warns(UserWarning):
+        with pytest.warns(UserWarning, match="The DataFrame contains missing values"):
             self.ingestion.ingest_and_validate(str(missing_csv))
 
     def test_duplicate_rows(self, test_data_dir):
         duplicate_csv = test_data_dir / 'duplicate.csv'
         pd.DataFrame({'A': [1, 1], 'B': [3, 3]}).to_csv(duplicate_csv, index=False)
-        with pytest.warns(UserWarning):
+        with pytest.warns(UserWarning, match="The DataFrame contains 1 duplicate rows"):
             self.ingestion.ingest_and_validate(str(duplicate_csv))
