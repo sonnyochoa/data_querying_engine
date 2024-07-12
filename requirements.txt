@@ -1,0 +1,7 @@
+# requirements.txt
+pandas
+openpyxl
+pyarrow
+sqlalchemy
+pytest
+pytest-cov
