@@ -57,10 +57,11 @@ class DataIngestion:
             raise ValueError("The DataFrame is empty")
         
         if df.isnull().values.any():
-            print("Warning: The DataFrame contains missing values")
+            warnings.warn("The DataFrame contains missing values", UserWarning)
         
         if df.duplicated().sum() > 0:
-            print(f"Warning: The DataFrame contains {df.duplicated().sum()} duplicate rows")
+            warnings.warn(f"The DataFrame contains {df.duplicated().sum()} duplicate rows", UserWarning)
+
 
     def read_sql(self, query: str, connection: str) -> pd.DataFrame:
         """
