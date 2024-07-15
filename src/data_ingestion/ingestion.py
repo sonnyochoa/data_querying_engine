@@ -2,8 +2,9 @@
 
 import pandas as pd
 import os
-from typing import Optional
+from typing import Dict, Any, Optional
 import warnings
+from src.data_profiling.profiling import DataProfiler
 
 class DataIngestion:
     def __init__(self):
@@ -32,6 +33,24 @@ class DataIngestion:
         df = self._read_file(file_path, file_format)
         self._validate_data(df)
         return df
+    
+    def ingest_and_profile(self, file_path: str) -> Dict[str, Any]:
+        """
+        Ingest data from the given file path, validate it, and generate a profile.
+        
+        Args:
+            file_path (str): Path to the data file.
+        
+        Returns:
+            Dict[str, Any]: A dictionary containing the ingested DataFrame and its profile.
+        
+        Raises:
+            ValueError: If the file format is unsupported or if validation fails.
+        """
+        df = self.ingest_and_validate(file_path)
+        profiler = DataProfiler(df)
+        profile = profiler.generate_profile()
+        return {"data": df, "profile": profile}
 
     def _detect_file_format(self, file_path: str) -> str:
         """Detect file format based on file extension."""

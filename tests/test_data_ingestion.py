@@ -48,3 +48,11 @@ class TestDataIngestion:
         pd.DataFrame({'A': [1, 1], 'B': [3, 3]}).to_csv(duplicate_csv, index=False)
         with pytest.warns(UserWarning, match="The DataFrame contains 1 duplicate rows"):
             self.ingestion.ingest_and_validate(str(duplicate_csv))
+
+    def test_ingest_and_profile(self, sample_csv):
+        result = self.ingestion.ingest_and_profile(str(sample_csv))
+        assert "data" in result
+        assert "profile" in result
+        assert isinstance(result["data"], pd.DataFrame)
+        assert isinstance(result["profile"], dict)
+        assert set(result["profile"].keys()) == {'basic_info', 'summary_stats', 'missing_values', 'unique_values', 'data_types', 'correlations'}
